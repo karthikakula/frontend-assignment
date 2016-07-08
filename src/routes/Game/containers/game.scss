@@ -1,0 +1,12 @@
+.gameContainer {
+  display: flex;
+  flex-direction: row;
+
+  .sideBar {
+    flex: 1 1 20%;
+  }
+
+  .contentArea {
+    flex: 1 1 80%;
+  }
+}
