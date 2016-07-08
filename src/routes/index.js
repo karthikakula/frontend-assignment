@@ -7,7 +7,6 @@ import GameRoute from './Game';
 
 export const createRoutes = (store) => ({
   path: '/',
-  component: CoreLayout,
   indexRoute: GameRoute
 })
 

@@ -1,0 +1,14 @@
+.peg {
+  transition: transform 0.2s;
+  background: transparent;
+  font-family: 'Arial Unicode MS';
+  font-size: 5em; 
+  &.dragging {
+    transform: rotate(-25deg);
+    opacity: 0.5;
+  }
+}
+
+.noBackground {
+  background-color: red;
+}

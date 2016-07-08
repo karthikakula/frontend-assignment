@@ -1,8 +1,15 @@
 import React from 'react';
+import scss from './Sidebar.scss';
+import classnames from 'classnames';
 
-const Sidebar = ({ ...props }) => {
-  return (<div {...props}>
-    I iz Sidebar
+const Sidebar = ({ children, className, ...props }) => {
+  const finalClassName = classnames(
+    className,
+    scss.sidebar
+  );
+
+  return (<div className={ finalClassName } {...props}>
+    { children }
   </div>)
 };
 
