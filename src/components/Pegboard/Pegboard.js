@@ -2,34 +2,28 @@ import React from 'react';
 import scss from './Pegboard.scss';
 import classnames from 'classnames';
 import Axis from '../Axis';
-import { scaleLinear } from 'd3-scale';
 import { Range } from 'immutable';
 import { DropTarget } from 'react-dnd';
 import { PEG_TYPE } from '../Peg';
 import { findDOMNode } from 'react-dom';
 
-console.log(PEG_TYPE);
+/*
+hover: (props, monitor, component) => {
+
+}
+*/
 
 const target = {
-  drop: (props) => {
-    console.log('is dropped');
-  },
+  drop: (props, monitor, component) => {
+    const { xScale, yScale } = props;
 
-  hover: (props, monitor, component) => {
     const offset = monitor.getClientOffset();
-    const boundingRect = findDOMNode(component).getBoundingClientRect();
+    const targetRect = findDOMNode(component).getBoundingClientRect();
 
-    console.log(props);
+    const x = Math.round(xScale.invert(offset.x - targetRect.left - props.margins.left));
+    const y = Math.round(yScale.invert(offset.y - targetRect.top - props.margins.top));
 
-    // get the relative x and y positions
-    // offset is the ABSOLUTE dragging positions
-    // boundingRect is the ABSOLUTE position of the
-    // element being hovered (top-left being 0,0)
-    // also, remeber to remove the margins
-    const x = offset.x - boundingRect.left - props.margins.left;
-    const y = offset.y - boundingRect.top - props.margins.top;
-
-    console.log(`${x},${y}`)
+    console.log(`do drop on x:${x}, y:${y}`)
   }
 }
 
@@ -39,23 +33,19 @@ const collect = (connect, monitor) => ({
 });
 
 class Pegboard extends React.Component {
+
   render() {
-    const { connectDropTarget, className, xTicks, yTicks, growthFactor, isOver, margins, ...props } = this.props;
+    const {
+      connectDropTarget, className, xScale, yScale, isOver, margins,
+      xTicks, yTicks, ...props
+    } = this.props;
 
     const finalClassName = classnames(
       className, scss.pegBoard
     );
 
-    const xSize = growthFactor * xTicks;
-    const ySize = growthFactor * yTicks;
-
-    const xScale = scaleLinear()
-      .domain([0, xTicks])
-      .range([0, xSize]);
-
-    const yScale = scaleLinear()
-      .domain([yTicks, 0])
-      .range([0, ySize]);
+    const xSize = xScale.range()[1];
+    const ySize = yScale.range()[1];
 
     return (connectDropTarget(<svg
       width={ xSize + margins.left + margins.right }
