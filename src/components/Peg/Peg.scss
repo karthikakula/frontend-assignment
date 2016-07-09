@@ -1,11 +1,40 @@
 .peg {
   transition: transform 0.2s;
   background: transparent;
-  font-family: 'Arial Unicode MS';
-  font-size: 5em; 
+  border: 1px solid black;
+  margin-bottom: 5px;
+  position: relative;
+
+  .pegImg {
+    width: 50px;
+    height: 60px;
+  }
+
+  .pegId {
+    position: absolute;
+    color: white;
+    left:20px;
+    text-align: center;
+    top: 15px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .pegInfo {
+    width: 55px;
+    text-align: center;
+    padding-top: 10px;
+  }
+
+  &.dropped {
+    border: none;
+    margin: 0;
+  }
+
   &.dragging {
     transform: rotate(-25deg);
     opacity: 0.5;
+    margin: 0;
   }
 }
 

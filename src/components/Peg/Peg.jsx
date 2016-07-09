@@ -3,12 +3,19 @@ import scss from './Peg.scss';
 import { DragSource } from 'react-dnd';
 import classnames from 'classnames';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import imgSrc from './assets/Biar99bi8.png';
 
 export const PEG_TYPE = 'PEG';
 
 const source = {
   beginDrag(props) {
-    return {};
+    const { currentPos, peg, removePeg } = props;
+
+    peg.currentPos = currentPos;
+
+    return {
+      peg: props.peg
+    };
   }
 }
 
@@ -31,14 +38,21 @@ class Peg extends React.Component {
   }
 
   render() {
-    const { connectDragSource, isDragging, connectDragPreview, ...props } = this.props;
+    const { connectDragSource, placed, isDragging, connectDragPreview, onPegGrab, peg, currentPos, ...props } = this.props;
 
     const finalClassName = classnames(
       scss.peg,
-      isDragging ? scss.dragging : null
+      isDragging ? scss.dragging : null,
+      currentPos ? scss.dropped : null
     )
 
-    return connectDragSource(<span { ...props } className={ finalClassName }>†</span>);
+    return (connectDragSource(
+      <div className={ finalClassName } {...props }>
+        <span className={ scss.pegId }>{ peg.id }</span>
+        <img className={ scss.pegImg } src={ imgSrc } />
+        { !placed ? (<div className={ scss.pegInfo } >x:{ peg.x }, y:{peg.y} </div>) : null }
+      </div>
+    ));
   }
 }
 

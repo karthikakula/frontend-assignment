@@ -1,13 +1,17 @@
 // We only need to import the modules necessary for initial render
-import CoreLayout from '../layouts/CoreLayout/CoreLayout';
-import GameRoute from './Game';
+import Home from './Home'
+import PegboardContainer from './Pegboard';
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
 
 export const createRoutes = (store) => ({
   path: '/',
-  indexRoute: GameRoute
+  indexRoute: Home,
+  childRoutes: [
+    PegboardContainer(store)
+  ]
+
 })
 
 /*  Note: childRoutes can be chunked or otherwise loaded programmatically
