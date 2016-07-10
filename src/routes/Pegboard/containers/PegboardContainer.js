@@ -9,14 +9,7 @@ import { SnapDragLayer } from 'components/SnapDragLayer';
 import { scaleLinear } from 'd3-scale';
 import { connect } from 'react-redux';
 import { actions } from '../modules/pegboard';
-import { is } from 'immutable';
-
-const PEGS = [
-  { id: '1', x: '5', y: '4' },
-  { id: '2', x: '2', y: '3' },
-  { id: '3', x: '1', y: '9' },
-  { id: '4', x: '9', y: '2' }
-]
+import { is, Map } from 'immutable';
 
 class PegboardContainer extends React.Component {
   constructor(props) {
@@ -27,38 +20,32 @@ class PegboardContainer extends React.Component {
   }
 
   onReset() {
-    const { initBoard } = this.props;
-    initBoard({ height: 10, width: 15 })
+    const { initBoard, pegboard } = this.props;
+    initBoard({ height: pegboard.size, width: pegboard.first().size })
   }
 
   onCheck() {
-    const { pegboard } = this.props;
+    const { pegboard, pegs } = this.props;
 
     if(this.getPegsLeft().length > 0) {
-      return alert('you still have pegs left to place')
+      return alert('You still have pegs left to place')
     }
 
-    let badPeg = false;
-    let msg = '';
-    PEGS.forEach(peg => {
-
-      if(pegboard.getIn([peg.y, peg.x]).id !== peg.id) {
-        msg += `peg ${peg.id} should be at x: ${peg.x}, y: ${peg.y}\n`;
-        badPeg = true;
+    const res = pegs.map(peg => {
+      if(!is(pegboard.getIn([peg.get('y'), peg.get('x')]), peg)) {
+        return `Peg ${peg.get('id')} should be at ${peg.get('x')}, ${peg.get('y')}\n`;
       }
+
+      return null;
     })
 
-    if(!badPeg) {
-      alert('You did it!');
-    } else {
-      alert(msg);
-    }
+    alert(res.join('').trim() || 'You did it!');
   }
 
   getPegsLeft() {
-    const { pegboard } = this.props;
+    const { pegboard, pegs } = this.props;
 
-    return PEGS
+    return pegs
       .filter((peg) => !pegboard.find(pegs => pegs.find(peghole => is(peghole, peg))));
   }
 
@@ -70,9 +57,9 @@ class PegboardContainer extends React.Component {
       return null;
     }
 
+    const growthFactor = 50;
     const yTicks = pegboard.size - 1;
     const xTicks = pegboard.first().size - 1;
-    const growthFactor = 50;
 
     const ySize = growthFactor * yTicks;
     const xSize = growthFactor * xTicks;
@@ -85,37 +72,36 @@ class PegboardContainer extends React.Component {
       .domain([0, xTicks])
       .range([0, xSize]);
 
-    return (<div className={ classes.gameContainer }>
-      <Sidebar className={ classes.sideBar }>
-        {
-          this.getPegsLeft()
-            .map((peg) => <Peg onPegGrab={ removePeg } peg={ peg } key={ peg.id } />)
-        }
-      </Sidebar>
-      <Pegboard
-        margins={
-           { top: 20, left: 50, right: 20, bottom: 20 }
-        }
-        onPegDrop={ placePeg }
-        onPegGrab={ removePeg }
-        className={ classes.contentArea }
-        pegboard={ pegboard }
-        xScale={ xScale }
-        yScale={ yScale }
-        xTicks={ xTicks }
-        yTicks={ yTicks }
-      />
-    <div>
-    <button onClick={ this.onCheck }>Check Results</button>
-    <button onClick={ this.onReset }>Reset</button>
+    return (
+      <div className={ classes.gameContainer }>
+        <Sidebar className={ classes.sideBar }>
+          {
+            this.getPegsLeft()
+              .map((peg) => <Peg onPegGrab={ removePeg } peg={ peg } key={ peg.get('id') } />)
+          }
+        </Sidebar>
+        <Pegboard
+          margins={ { top: 20, left: 50, right: 20, bottom: 20 } }
+          onPegDrop={ placePeg }
+          onPegGrab={ removePeg }
+          className={ classes.contentArea }
+          pegboard={ pegboard }
+          xScale={ xScale }
+          yScale={ yScale }
+        />
+      <div>
+        <button onClick={ this.onCheck }>Check Results</button>
+        <button onClick={ this.onReset }>Reset</button>
+      </div>
     </div>
-    </div>);
+  );
   }
 
 }
 
 const mapStateToProps = (state, props) => ({
-  pegboard: state.pegboard
+  pegboard: state.pegboard,
+  pegs: state.pegs
 });
 
 const mapDispatchToProps = {

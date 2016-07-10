@@ -9,11 +9,16 @@ export default (store) => ({
     require.ensure([], (require) => {
       /*  Webpack - use require callback to define
           dependencies for bundling   */
-      const Counter = require('./containers/PegboardContainer').default
-      const reducer = require('./modules/pegboard').default
+      const Counter = require('./containers/PegboardContainer').default;
+      const reducerPegboard = require('./modules/pegboard').default;
+      const reducerPegs = require('./modules/pegs').default;
+
+      console.log(reducerPegs);
+      console.log(reducerPegboard);
 
       /*  Add the reducer to the store on key 'counter'  */
-      injectReducer(store, { key: 'pegboard', reducer })
+      injectReducer(store, { key: 'pegboard', reducer: reducerPegboard });
+      injectReducer(store, { key: 'pegs', reducer: reducerPegs });
 
       /*  Return getComponent   */
       cb(null, Counter)

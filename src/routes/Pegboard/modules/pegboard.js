@@ -1,4 +1,4 @@
-import { List } from 'immutable';
+import { List, fromJS } from 'immutable';
 
 // ------------------------------------
 // Constants
@@ -52,16 +52,24 @@ export const actions = {
 const ACTION_HANDLERS = {
   [PLACE_PEG]: (state, { payload }) => state.setIn([payload.y, payload.x], payload.peg),
   [INIT_BOARD]: (state, { payload }) => List().setSize(payload.height).map(() => List().setSize(payload.width).map(() => false)),
-  [REMOVE_PEG]: (state, { payload }) => {
-    console.log(payload);
-    return state.setIn([payload.y, payload.x], false)
-  }
+  [REMOVE_PEG]: (state, { payload }) => state.setIn([payload.y, payload.x], false)
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = null;
+const initialState = fromJS([
+  [false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false, false, false]
+]);
 
 export default function pegboardReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]

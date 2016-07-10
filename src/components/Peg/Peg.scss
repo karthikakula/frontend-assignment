@@ -1,5 +1,5 @@
 .peg {
-  transition: transform 0.2s;
+  transition: transform 0.4s;
   background: transparent;
   border: 1px solid black;
   margin-bottom: 5px;
@@ -32,7 +32,7 @@
   }
 
   &.dragging {
-    transform: rotate(-25deg);
+    transform: rotate(-25deg) translateY(-10px);
     opacity: 0.5;
     margin: 0;
   }

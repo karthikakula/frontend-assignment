@@ -7,10 +7,12 @@ import { DropTarget } from 'react-dnd';
 import { PEG_TYPE } from '../Peg';
 import { findDOMNode } from 'react-dom';
 import { Peg } from '../Peg';
+import { scaleLinear } from 'd3-scale';
 
 const target = {
   drop: (props, monitor, component) => {
-    const { xScale, yScale } = props;
+    const xScale = component.getXScale();
+    const yScale = component.getYScale();
 
     const offset = monitor.getClientOffset();
     const targetRect = findDOMNode(component).getBoundingClientRect();
@@ -19,7 +21,7 @@ const target = {
     const y = Math.round(yScale.invert(offset.y - targetRect.top - props.margins.top));
 
     const peg = monitor.getItem().peg;
-    
+
     if(peg.currentPos) {
       props.onPegGrab(peg.currentPos)
     }
@@ -32,6 +34,8 @@ const collect = (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver()
 });
+
+const GROWTH_FACTOR = 50;
 
 class Pegboard extends React.Component {
 
@@ -51,19 +55,54 @@ class Pegboard extends React.Component {
     return isOver || pegboard.getIn([y, x]) ? '5' : '3';
   }
 
+  getYSize() {
+    return this.getYTicks() * GROWTH_FACTOR;
+  }
+
+  getXSize() {
+    return this.getXTicks() * GROWTH_FACTOR;
+  }
+
+  getXTicks() {
+    const { pegboard } = this.props;
+    return pegboard.size - 1;
+  }
+
+  getYTicks() {
+    const { pegboard } = this.props;
+    return pegboard.first().size - 1;
+  }
+
+  getXScale() {
+    return scaleLinear()
+      .domain([0, this.getXTicks()])
+      .range([0, this.getXSize()]);
+  }
+
+  getYScale() {
+    return scaleLinear()
+      .domain([this.getYTicks(), 0])
+      .range([0, this.getYSize()]);
+  }
+
   render() {
     const {
-      connectDropTarget, className, xScale, yScale, isOver, margins,
-      xTicks, yTicks, pegboard, onPegGrab, ...props
+      connectDropTarget, className, isOver, margins, pegboard, onPegGrab, ...props
     } = this.props;
 
     const finalClassName = classnames(
       className, scss.pegBoard
     );
 
-    const xSize = xScale.range()[1];
-    const ySize = yScale.range()[1];
+    const yTicks = this.getYTicks();
+    const xTicks = this.getXTicks();
 
+    const ySize = this.getYSize();
+    const xSize = this.getXSize();
+
+    const yScale= this.getYScale();
+    const xScale = this.getXScale();
+ 
     return connectDropTarget(<div style={ { position: 'relative' } }>
       {
         Range(0, xTicks + 1).map(xNum => (

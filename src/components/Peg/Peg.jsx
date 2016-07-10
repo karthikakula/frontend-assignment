@@ -48,9 +48,9 @@ class Peg extends React.Component {
 
     return (connectDragSource(
       <div className={ finalClassName } {...props }>
-        <span className={ scss.pegId }>{ peg.id }</span>
+        <span className={ scss.pegId }>{ peg.get('id') }</span>
         <img className={ scss.pegImg } src={ imgSrc } />
-        { !placed ? (<div className={ scss.pegInfo } >x:{ peg.x }, y:{peg.y} </div>) : null }
+        { !placed ? (<div className={ scss.pegInfo } >x:{ peg.get('x') }, y:{peg.get('y') } </div>) : null }
       </div>
     ));
   }
