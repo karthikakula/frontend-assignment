@@ -24,10 +24,8 @@ class PegboardContainer extends React.Component {
   }
 
   onReset() {
-    const rnd = (min, max) => Math.random() * (max - min) + min
-
     const { initBoard, pegboard } = this.props;
-    initBoard({ height: rnd(5, 15), width: rnd(9, 15) })
+    initBoard({ height: 10, width: 10 })
   }
 
   onCheck() {
@@ -56,7 +54,7 @@ class PegboardContainer extends React.Component {
   }
 
   render() {
-    const { placePeg, pegboard, initBoard, removePeg } = this.props;
+    const { placePeg, pegboard, initBoard, removePeg, pegs } = this.props;
 
     if(!pegboard || pegboard.size === 0) {
       this.onReset();
@@ -115,8 +113,8 @@ class PegboardContainer extends React.Component {
           sidebarWidth={ SIDEBAR_WIDTH }
         />
       <div>
-        <button onClick={ this.onCheck }>Check Results</button>
-        <button onClick={ this.onReset }>Reset</button>
+        <button disabled={ this.getPegsLeft().size > 0 } onClick={ this.onCheck } >Check Results</button>
+        <button disabled={ this.getPegsLeft().size === pegs.size } onClick={ this.onReset }>Reset</button>
       </div>
     </div>
   );

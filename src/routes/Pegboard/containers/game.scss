@@ -3,9 +3,13 @@
   flex-direction: row;
   height: 100%;
 
-  .sideBar { 
+  .sideBar {
   }
 
   .contentArea {
+  }
+
+  button:disabled {
+    opacity: 0.5;
   }
 }

@@ -84,8 +84,6 @@ const initialState = fromJS([
   [false, false, false, false, false, false, false, false, false, false],
   [false, false, false, false, false, false, false, false, false, false],
   [false, false, false, false, false, false, false, false, false, false],
-  [false, false, false, false, false, false, false, false, false, false],
-  [false, false, false, false, false, false, false, false, false, false],
   [false, false, false, false, false, false, false, false, false, false]
 ]);
 
