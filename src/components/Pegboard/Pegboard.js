@@ -17,8 +17,11 @@ const target = {
     const offset = monitor.getClientOffset();
     const targetRect = findDOMNode(component).getBoundingClientRect();
 
+    console.log('------ ON DROP -------');
+    console.log(`os-y: ${offset.y}, tr-y: ${targetRect.top}, mg-t: ${props.margins.top}`)
     const x = Math.round(xScale.invert(offset.x - targetRect.left - props.margins.left));
     const y = Math.round(yScale.invert(offset.y - targetRect.top - props.margins.top));
+    console.log(`x: ${x}, y: ${y}`)
 
     const peg = monitor.getItem().peg;
 
@@ -115,8 +118,9 @@ class Pegboard extends React.Component {
                 currentPos={ { x: xNum, y: yNum } }
                 style={ {
                 position: 'absolute',
-                top: `${yScale(yNum) - margins.top + 48}px`,
-                left: `${xScale(xNum) + margins.left - 24}px` }
+                top: `${yScale(yNum) + margins.top - 40}px`, // 40 = pin height
+                left: `${xScale(xNum) + margins.left - 14}px` // 14 = 1/2 pin width
+              }
               } />) :
               null
           ))
@@ -125,7 +129,7 @@ class Pegboard extends React.Component {
         <svg width={ xSize + margins.left + margins.right }
           height={ ySize + margins.top + margins.bottom }
           className={ finalClassName } >
-          <g transform={ `translate(${margins.left},${margins.top})`}>
+          <g transform={ `translate(${margins.left}, ${margins.top})`}>
             {
               // immutable ranges are inclusive at the start
               // exclusive at the end

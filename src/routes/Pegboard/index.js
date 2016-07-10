@@ -1,29 +1,15 @@
-import { injectReducer } from '../../store/reducers'
+import { injectReducer } from '../../store/reducers';
+import PegboardContainer from './containers/PegboardContainer';
+import reducerPegboard from './modules/pegboard';
+import reducerPegs from './modules/pegs';
 
-export default (store) => ({
-  path: 'pegboard',
-  /*  Async getComponent is only invoked when route matches   */
-  getComponent (nextState, cb) {
-    /*  Webpack - use 'require.ensure' to create a split point
-        and embed an async module loader (jsonp) when bundling   */
-    require.ensure([], (require) => {
-      /*  Webpack - use require callback to define
-          dependencies for bundling   */
-      const Counter = require('./containers/PegboardContainer').default;
-      const reducerPegboard = require('./modules/pegboard').default;
-      const reducerPegs = require('./modules/pegs').default;
+/*  Add the reducer to the store on key 'counter'  */
 
-      console.log(reducerPegs);
-      console.log(reducerPegboard);
+export default (store) => {
+  injectReducer(store, { key: 'pegboard', reducer: reducerPegboard });
+  injectReducer(store, { key: 'pegs', reducer: reducerPegs });
 
-      /*  Add the reducer to the store on key 'counter'  */
-      injectReducer(store, { key: 'pegboard', reducer: reducerPegboard });
-      injectReducer(store, { key: 'pegs', reducer: reducerPegs });
-
-      /*  Return getComponent   */
-      cb(null, Counter)
-
-    /* Webpack named bundle   */
-    }, 'pegboard')
+  return {
+    component: PegboardContainer
   }
-})
+}

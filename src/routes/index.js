@@ -1,5 +1,4 @@
 // We only need to import the modules necessary for initial render
-import Home from './Home'
 import PegboardContainer from './Pegboard';
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -7,10 +6,7 @@ import PegboardContainer from './Pegboard';
 
 export const createRoutes = (store) => ({
   path: '/',
-  indexRoute: Home,
-  childRoutes: [
-    PegboardContainer(store)
-  ]
+  indexRoute: PegboardContainer(store)
 
 })
 

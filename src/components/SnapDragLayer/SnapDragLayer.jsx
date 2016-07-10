@@ -22,19 +22,21 @@ class SnapDragLayer extends React.Component {
 
     if(currentOffset) {
 
-      console.log(currentOffset.y);
-
       if(currentOffset.x <= 83 || currentOffset.x >= 560 || currentOffset.y <= 33 || currentOffset.y >= 625) {
         return null;
       }
+      console.log('------ ON DRAG LAYER --------');
+      console.log(`os-y: ${currentOffset.y}, mn-y: ${0}, mg-t: ${margins.top}`);
 
-      const x = xScale(Math.round(xScale.invert(currentOffset.x - 57 - margins.left))) + 83;
-      const y = yScale(Math.round(yScale.invert(currentOffset.y - 0 - margins.top))) - 2;
+      const x = Math.round(xScale.invert(currentOffset.x - 57 - margins.left));
+      const y = Math.round(yScale.invert(currentOffset.y - 0 - margins.top));
+
+      console.log(`x: ${x}, y: ${y}`);
 
       const style = {
         position:'absolute',
-        top: `${y}px`,
-        left: `${x}px`
+        top: `${yScale(y)}px`,
+        left: `${xScale(x)}px`
       };
 
       return (<div style={ layerStyles }>

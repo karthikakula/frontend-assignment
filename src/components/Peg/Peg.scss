@@ -12,18 +12,26 @@
 
   .pegId {
     position: absolute;
-    color: white;
-    left:20px;
-    text-align: center;
-    top: 15px;
+    color: yellow;
     font-weight: bold;
     font-size: 16px;
+    left: 9px;
+    top: 5px;
+    background-color: black;
   }
 
   .pegInfo {
     width: 55px;
     text-align: center;
     padding-top: 10px;
+  }
+
+  .pegIcon {
+    position: relative;
+    font-size: 40px;
+    color: black;
+    width:28px;
+    text-align: center;
   }
 
   &.dropped {
@@ -36,8 +44,4 @@
     opacity: 0.5;
     margin: 0;
   }
-}
-
-.noBackground {
-  background-color: red;
 }
