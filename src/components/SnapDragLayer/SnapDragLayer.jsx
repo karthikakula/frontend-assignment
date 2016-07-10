@@ -24,7 +24,7 @@ class SnapDragLayer extends React.Component {
 
       console.log(currentOffset.y);
 
-      if(currentOffset.x <= 105 || currentOffset.x >= 560 || currentOffset.y <= 33 || currentOffset.y >= 586) {
+      if(currentOffset.x <= 83 || currentOffset.x >= 560 || currentOffset.y <= 33 || currentOffset.y >= 625) {
         return null;
       }
 
