@@ -3,7 +3,6 @@ import scss from './Peg.scss';
 import { DragSource } from 'react-dnd';
 import classnames from 'classnames';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import imgSrc from './assets/Biar99bi8.png';
 
 export const PEG_TYPE = 'PEG';
 
@@ -11,10 +10,9 @@ const source = {
   beginDrag(props) {
     const { currentPos, peg, removePeg } = props;
 
-    peg.currentPos = currentPos;
-
     return {
-      peg: props.peg
+      peg: props.peg,
+      currentPos
     };
   }
 }

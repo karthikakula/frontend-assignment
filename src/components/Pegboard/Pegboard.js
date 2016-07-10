@@ -8,21 +8,22 @@ import { PEG_TYPE } from '../Peg';
 import { findDOMNode } from 'react-dom';
 import { Peg } from '../Peg';
 import { scaleLinear } from 'd3-scale';
+import { calcXPos, calcYPos } from 'util';
 
 const target = {
   drop: (props, monitor, component) => {
-    const { xScale, yScale } = props;
+    const { xScale, yScale, margins } = props;
 
     const offset = monitor.getClientOffset();
     const targetRect = findDOMNode(component).getBoundingClientRect();
 
-    const x = Math.round(xScale.invert(offset.x - targetRect.left - props.margins.left));
-    const y = Math.round(yScale.invert(offset.y - targetRect.top - props.margins.top));
+    const x = calcXPos(xScale, offset.x, targetRect.left, props.margins.left);
+    const y = calcYPos(yScale, offset.y, margins.top);
 
-    const peg = monitor.getItem().peg;
+    const { peg, currentPos } = monitor.getItem();
 
-    if(peg.currentPos) {
-      props.onPegGrab(peg.currentPos)
+    if(currentPos) {
+      props.onPegGrab(currentPos)
     }
 
     props.onPegDrop({ x, y, peg });
@@ -65,6 +66,8 @@ class Pegboard extends React.Component {
 
     return connectDropTarget(<div style={ { position: 'relative' } }>
       {
+        // immutable ranges are inclusive at the start
+        // exclusive at the end
         Range(0, xTicks + 1).map(xNum => (
           Range(0, yTicks + 1).map(yNum => (
             pegboard.getIn([xNum, yNum]) ?
@@ -76,14 +79,10 @@ class Pegboard extends React.Component {
                 placed={ true }
                 currentPos={ { x: xNum, y: yNum } }
                 style={ {
-                position: 'absolute',
-                // 40 = pin height
-                top: `${yScale(yNum) + margins.top - pinHeight}px`,
-                // 14 = 1/2 pin width; we DONT need to account for side bar width
-                // here since our div is only over the SVG
-                left: `${xScale(xNum) + margins.left - (pinWidth / 2)}px`
-              }
-              } />) :
+                  position: 'absolute',
+                  top: `${yScale(yNum) + margins.top - pinHeight}px`,
+                  left: `${xScale(xNum) + margins.left - (pinWidth / 2)}px`
+                } } />) :
               null
           ))
         ))
@@ -93,18 +92,16 @@ class Pegboard extends React.Component {
           className={ finalClassName } >
           <g transform={ `translate(${margins.left}, ${margins.top})`}>
             {
-              // immutable ranges are inclusive at the start
-              // exclusive at the end
               Range(0, xTicks + 1).map(xNum => (
                 Range(0, yTicks + 1).map(yNum => (
                   !pegboard.getIn([xNum, yNum]) ?
                     <circle
-                      opacity="1"
                       r={ this.pegRadius(xNum, yNum) }
                       cx={ xScale(xNum) }
                       cy={ yScale(yNum) }
                       fill={ this.pegColor(xNum, yNum) }
-                      /> : null
+                    /> :
+                    null
                 ))
               ))
             }
