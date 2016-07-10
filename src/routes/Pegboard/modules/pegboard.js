@@ -50,9 +50,9 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [PLACE_PEG]: (state, { payload }) => state.setIn([payload.y, payload.x], payload.peg),
+  [PLACE_PEG]: (state, { payload }) => state.setIn([payload.x, payload.y], payload.peg),
   [INIT_BOARD]: (state, { payload }) => List().setSize(payload.height).map(() => List().setSize(payload.width).map(() => false)),
-  [REMOVE_PEG]: (state, { payload }) => state.setIn([payload.y, payload.x], false)
+  [REMOVE_PEG]: (state, { payload }) => state.setIn([payload.x, payload.y], false)
 }
 
 // ------------------------------------

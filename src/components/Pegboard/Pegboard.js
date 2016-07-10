@@ -42,7 +42,7 @@ class Pegboard extends React.Component {
   pegColor(x, y) {
     const { pegboard, isOver } = this.props;
 
-    if(pegboard.getIn([y, x])) {
+    if(pegboard.getIn([x, y])) {
       return 'green';
     }
 
@@ -52,7 +52,7 @@ class Pegboard extends React.Component {
   pegRadius(x, y) {
     const { pegboard, isOver } = this.props;
 
-    return isOver || pegboard.getIn([y, x]) ? '5' : '3';
+    return isOver || pegboard.getIn([x, y]) ? '5' : '3';
   }
 
   getYSize() {
@@ -102,20 +102,20 @@ class Pegboard extends React.Component {
 
     const yScale= this.getYScale();
     const xScale = this.getXScale();
- 
+
     return connectDropTarget(<div style={ { position: 'relative' } }>
       {
         Range(0, xTicks + 1).map(xNum => (
           Range(0, yTicks + 1).map(yNum => (
-            pegboard.getIn([yNum, xNum]) ?
+            pegboard.getIn([xNum, yNum]) ?
               (<Peg
                 onPegGrab={ onPegGrab }
-                peg={ pegboard.getIn([yNum, xNum]) }
+                peg={ pegboard.getIn([xNum, yNum]) }
                 placed={ true }
                 currentPos={ { x: xNum, y: yNum } }
                 style={ {
                 position: 'absolute',
-                top: `${yScale(yNum) - margins.top - 13}px`,
+                top: `${yScale(yNum) - margins.top + 48}px`,
                 left: `${xScale(xNum) + margins.left - 24}px` }
               } />) :
               null
@@ -125,13 +125,13 @@ class Pegboard extends React.Component {
         <svg width={ xSize + margins.left + margins.right }
           height={ ySize + margins.top + margins.bottom }
           className={ finalClassName } >
-          <g transform={ `translate(${margins.left},${margins.right})`}>
+          <g transform={ `translate(${margins.left},${margins.top})`}>
             {
               // immutable ranges are inclusive at the start
               // exclusive at the end
               Range(0, xTicks + 1).map(xNum => (
                 Range(0, yTicks + 1).map(yNum => (
-                  !pegboard.getIn([yNum, xNum]) ?
+                  !pegboard.getIn([xNum, yNum]) ?
                     <circle
                       opacity="1"
                       r={ this.pegRadius(xNum, yNum) }

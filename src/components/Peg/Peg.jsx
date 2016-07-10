@@ -33,7 +33,7 @@ class Peg extends React.Component {
     connectDragPreview(getEmptyImage(), {
       // IE fallback: specify that we'd rather screenshot the node
       // when it already knows it's being dragged so we can hide it with CSS.
-      captureDraggingState: true
+      // captureDraggingState: true
     });
   }
 
@@ -43,14 +43,14 @@ class Peg extends React.Component {
     const finalClassName = classnames(
       scss.peg,
       isDragging ? scss.dragging : null,
-      currentPos ? scss.dropped : null
+      currentPos || placed ? scss.dropped : null
     )
 
     return (connectDragSource(
       <div className={ finalClassName } {...props }>
         <span className={ scss.pegId }>{ peg.get('id') }</span>
         <img className={ scss.pegImg } src={ imgSrc } />
-        { !placed ? (<div className={ scss.pegInfo } >x:{ peg.get('x') }, y:{peg.get('y') } </div>) : null }
+        { placed || isDragging ? null : (<div className={ scss.pegInfo } >x:{ peg.get('x') }, y:{peg.get('y') } </div>) }
       </div>
     ));
   }

@@ -32,7 +32,7 @@ class PegboardContainer extends React.Component {
     }
 
     const res = pegs.map(peg => {
-      if(!is(pegboard.getIn([peg.get('y'), peg.get('x')]), peg)) {
+      if(!is(pegboard.getIn([peg.get('x'), peg.get('y')]), peg)) {
         return `Peg ${peg.get('id')} should be at ${peg.get('x')}, ${peg.get('y')}\n`;
       }
 
@@ -72,6 +72,8 @@ class PegboardContainer extends React.Component {
       .domain([0, xTicks])
       .range([0, xSize]);
 
+    const margins = { top: 50, left: 50, right: 20, bottom: 20 };
+
     return (
       <div className={ classes.gameContainer }>
         <Sidebar className={ classes.sideBar }>
@@ -80,8 +82,13 @@ class PegboardContainer extends React.Component {
               .map((peg) => <Peg onPegGrab={ removePeg } peg={ peg } key={ peg.get('id') } />)
           }
         </Sidebar>
+        <SnapDragLayer
+          margins={ margins }
+          xScale={ xScale }
+          yScale={ yScale }
+        />
         <Pegboard
-          margins={ { top: 20, left: 50, right: 20, bottom: 20 } }
+          margins={ margins }
           onPegDrop={ placePeg }
           onPegGrab={ removePeg }
           className={ classes.contentArea }
