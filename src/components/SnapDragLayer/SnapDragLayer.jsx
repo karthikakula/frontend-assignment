@@ -16,31 +16,37 @@ const layerStyles = {
   width: '100%',
   height: '100%'
 };
+
 class SnapDragLayer extends React.Component {
   render() {
-    const { isDragging, currentOffset, item, xScale, yScale, margins } = this.props;
+    const {
+      isDragging, currentOffset, item, xScale, yScale, xSize, ySize, margins,
+      sidebarWidth, pinHeight, pinWidth
+    } = this.props;
 
     if(currentOffset) {
-
-      if(currentOffset.x <= 83 || currentOffset.x >= 560 || currentOffset.y <= 33 || currentOffset.y >= 625) {
+      if( currentOffset.x <= ((sidebarWidth + margins.left) * 0.99) ||
+          currentOffset.x >= ((sidebarWidth + xSize + margins.left) * 1.01) ||
+          currentOffset.y <= ((margins.top) * 0.99) ||
+          currentOffset.y >= ((ySize + margins.top) * 1.01) ) {
         return null;
       }
-      console.log('------ ON DRAG LAYER --------');
-      console.log(`os-y: ${currentOffset.y}, mn-y: ${0}, mg-t: ${margins.top}`);
 
-      const x = Math.round(xScale.invert(currentOffset.x - 57 - margins.left));
-      const y = Math.round(yScale.invert(currentOffset.y - 0 - margins.top));
-
-      console.log(`x: ${x}, y: ${y}`);
+      const x = Math.round(xScale.invert(currentOffset.x - sidebarWidth - margins.left));
+      const y = Math.round(yScale.invert(currentOffset.y - margins.top));
 
       const style = {
         position:'absolute',
-        top: `${yScale(y)}px`,
-        left: `${xScale(x)}px`
+
+        // 40 for pin height
+        top: `${yScale(y) + margins.top - pinHeight}px`,
+
+        // 14 for 1/2 pin width, 57 for sidebar width
+        left: `${xScale(x) + margins.left - (pinWidth/2) + sidebarWidth}px`
       };
 
       return (<div style={ layerStyles }>
-        <Peg placed={ true } peg={ item.peg } style={ style } />
+        <Peg width={ pinWidth } height={ pinHeight } placed={ true } peg={ item.peg } style={ style } />
       </div>);
     }
 

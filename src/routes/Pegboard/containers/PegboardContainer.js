@@ -11,6 +11,10 @@ import { connect } from 'react-redux';
 import { actions } from '../modules/pegboard';
 import { is, Map } from 'immutable';
 
+const SIDEBAR_WIDTH = 80;
+const PIN_HEIGHT = 50;
+const PIN_WIDTH = PIN_HEIGHT * 0.64;
+
 class PegboardContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -20,8 +24,10 @@ class PegboardContainer extends React.Component {
   }
 
   onReset() {
+    const rnd = (min, max) => Math.random() * (max - min) + min
+
     const { initBoard, pegboard } = this.props;
-    initBoard({ height: pegboard.size, width: pegboard.first().size })
+    initBoard({ height: rnd(5, 15), width: rnd(9, 15) })
   }
 
   onCheck() {
@@ -46,7 +52,7 @@ class PegboardContainer extends React.Component {
     const { pegboard, pegs } = this.props;
 
     return pegs
-      .filter((peg) => !pegboard.find(pegs => pegs.find(peghole => is(peghole, peg))));
+      .filter((peg) => !pegboard.find(pegrow => pegrow.find(peghole => is(peghole, peg))));
   }
 
   render() {
@@ -58,8 +64,8 @@ class PegboardContainer extends React.Component {
     }
 
     const growthFactor = 50;
-    const yTicks = pegboard.size - 1;
-    const xTicks = pegboard.first().size - 1;
+    const xTicks = pegboard.size - 1;
+    const yTicks = pegboard.first().size - 1;
 
     const ySize = growthFactor * yTicks;
     const xSize = growthFactor * xTicks;
@@ -76,16 +82,21 @@ class PegboardContainer extends React.Component {
 
     return (
       <div className={ classes.gameContainer }>
-        <Sidebar className={ classes.sideBar }>
+        <Sidebar className={ classes.sideBar } width={ SIDEBAR_WIDTH }>
           {
             this.getPegsLeft()
-              .map((peg) => <Peg onPegGrab={ removePeg } peg={ peg } key={ peg.get('id') } />)
+              .map((peg) => <Peg height={ PIN_HEIGHT } width={ PIN_WIDTH } onPegGrab={ removePeg } peg={ peg } key={ peg.get('id') } />)
           }
         </Sidebar>
         <SnapDragLayer
           margins={ margins }
           xScale={ xScale }
           yScale={ yScale }
+          xSize={ xSize }
+          ySize={ ySize }
+          pinWidth={ PIN_WIDTH }
+          pinHeight={ PIN_HEIGHT }
+          sidebarWidth={ SIDEBAR_WIDTH }
         />
         <Pegboard
           margins={ margins }
@@ -95,6 +106,13 @@ class PegboardContainer extends React.Component {
           pegboard={ pegboard }
           xScale={ xScale }
           yScale={ yScale }
+          xTicks={ xTicks }
+          yTicks={ yTicks }
+          xSize={ xSize }
+          ySize={ ySize }
+          pinWidth={ PIN_WIDTH }
+          pinHeight={ PIN_HEIGHT }
+          sidebarWidth={ SIDEBAR_WIDTH }
         />
       <div>
         <button onClick={ this.onCheck }>Check Results</button>

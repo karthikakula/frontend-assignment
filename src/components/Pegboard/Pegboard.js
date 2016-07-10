@@ -11,17 +11,13 @@ import { scaleLinear } from 'd3-scale';
 
 const target = {
   drop: (props, monitor, component) => {
-    const xScale = component.getXScale();
-    const yScale = component.getYScale();
+    const { xScale, yScale } = props;
 
     const offset = monitor.getClientOffset();
     const targetRect = findDOMNode(component).getBoundingClientRect();
 
-    console.log('------ ON DROP -------');
-    console.log(`os-y: ${offset.y}, tr-y: ${targetRect.top}, mg-t: ${props.margins.top}`)
     const x = Math.round(xScale.invert(offset.x - targetRect.left - props.margins.left));
     const y = Math.round(yScale.invert(offset.y - targetRect.top - props.margins.top));
-    console.log(`x: ${x}, y: ${y}`)
 
     const peg = monitor.getItem().peg;
 
@@ -37,8 +33,6 @@ const collect = (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver()
 });
-
-const GROWTH_FACTOR = 50;
 
 class Pegboard extends React.Component {
 
@@ -58,53 +52,16 @@ class Pegboard extends React.Component {
     return isOver || pegboard.getIn([x, y]) ? '5' : '3';
   }
 
-  getYSize() {
-    return this.getYTicks() * GROWTH_FACTOR;
-  }
-
-  getXSize() {
-    return this.getXTicks() * GROWTH_FACTOR;
-  }
-
-  getXTicks() {
-    const { pegboard } = this.props;
-    return pegboard.size - 1;
-  }
-
-  getYTicks() {
-    const { pegboard } = this.props;
-    return pegboard.first().size - 1;
-  }
-
-  getXScale() {
-    return scaleLinear()
-      .domain([0, this.getXTicks()])
-      .range([0, this.getXSize()]);
-  }
-
-  getYScale() {
-    return scaleLinear()
-      .domain([this.getYTicks(), 0])
-      .range([0, this.getYSize()]);
-  }
-
   render() {
     const {
-      connectDropTarget, className, isOver, margins, pegboard, onPegGrab, ...props
+      connectDropTarget, className, isOver, margins,
+      pegboard, onPegGrab, xScale, yScale, xSize, ySize,
+      xTicks, yTicks, pinHeight, pinWidth, ...props
     } = this.props;
 
     const finalClassName = classnames(
       className, scss.pegBoard
     );
-
-    const yTicks = this.getYTicks();
-    const xTicks = this.getXTicks();
-
-    const ySize = this.getYSize();
-    const xSize = this.getXSize();
-
-    const yScale= this.getYScale();
-    const xScale = this.getXScale();
 
     return connectDropTarget(<div style={ { position: 'relative' } }>
       {
@@ -112,14 +69,19 @@ class Pegboard extends React.Component {
           Range(0, yTicks + 1).map(yNum => (
             pegboard.getIn([xNum, yNum]) ?
               (<Peg
+                height={ pinHeight }
+                width={ pinWidth }
                 onPegGrab={ onPegGrab }
                 peg={ pegboard.getIn([xNum, yNum]) }
                 placed={ true }
                 currentPos={ { x: xNum, y: yNum } }
                 style={ {
                 position: 'absolute',
-                top: `${yScale(yNum) + margins.top - 40}px`, // 40 = pin height
-                left: `${xScale(xNum) + margins.left - 14}px` // 14 = 1/2 pin width
+                // 40 = pin height
+                top: `${yScale(yNum) + margins.top - pinHeight}px`,
+                // 14 = 1/2 pin width; we DONT need to account for side bar width
+                // here since our div is only over the SVG
+                left: `${xScale(xNum) + margins.left - (pinWidth / 2)}px`
               }
               } />) :
               null

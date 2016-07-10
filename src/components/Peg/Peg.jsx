@@ -38,7 +38,7 @@ class Peg extends React.Component {
   }
 
   render() {
-    const { connectDragSource, placed, isDragging, connectDragPreview, onPegGrab, peg, currentPos, ...props } = this.props;
+    const { connectDragSource, placed, isDragging, connectDragPreview, onPegGrab, peg, currentPos, width, height, ...props } = this.props;
 
     const finalClassName = classnames(
       scss.peg,
@@ -48,8 +48,7 @@ class Peg extends React.Component {
 
     return (connectDragSource(
       <div className={ finalClassName } {...props }>
-        <i className={ `fa fa-thumb-tack ${scss.pegIcon}`}>
-
+        <i className={ `fa fa-thumb-tack ${scss.pegIcon}`} style={ { fontSize: height, width } }>
             <span className={ scss.pegId }>{ peg.get('id') }</span>
         </i>
         { placed ? null : (<div className={ scss.pegInfo } >x:{ peg.get('x') }, y:{peg.get('y') } </div>) }

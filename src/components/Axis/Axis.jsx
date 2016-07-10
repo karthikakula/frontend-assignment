@@ -10,6 +10,13 @@ class Axis extends React.Component {
     // D3 so it can draw an axis
     return this.connectD3();
   }
+  
+  componentDidUpdate() {
+    // when the DOM is rendered,
+    // pass control of the "g" to
+    // D3 so it can draw an axis
+    return this.connectD3();
+  }
 
   connectD3() {
     const { orientation, scale, tickSizeInner, ticks } = this.props;

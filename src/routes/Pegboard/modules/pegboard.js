@@ -50,25 +50,43 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [PLACE_PEG]: (state, { payload }) => state.setIn([payload.x, payload.y], payload.peg),
-  [INIT_BOARD]: (state, { payload }) => List().setSize(payload.height).map(() => List().setSize(payload.width).map(() => false)),
-  [REMOVE_PEG]: (state, { payload }) => state.setIn([payload.x, payload.y], false)
+  [PLACE_PEG]: (state, { payload }) => {
+    const { x, y } = payload;
+
+    if(x >= state.size || y >= state.first().size) {
+      return state;
+    }
+
+    return state.setIn([payload.x, payload.y], payload.peg)
+  },
+  [INIT_BOARD]: (state, { payload }) => List().setSize(payload.width).map(() => List().setSize(payload.height).map(() => false)),
+  [REMOVE_PEG]: (state, { payload }) => {
+    const { x, y } = payload;
+
+    if(x > state.size || y > state.first().size) {
+      return state;
+    }
+
+    return state.setIn([payload.x, payload.y], false);
+  }
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 const initialState = fromJS([
-  [false, false, false, false, false, false, false, false, false, false, false, false],
-  [false, false, false, false, false, false, false, false, false, false, false, false],
-  [false, false, false, false, false, false, false, false, false, false, false, false],
-  [false, false, false, false, false, false, false, false, false, false, false, false],
-  [false, false, false, false, false, false, false, false, false, false, false, false],
-  [false, false, false, false, false, false, false, false, false, false, false, false],
-  [false, false, false, false, false, false, false, false, false, false, false, false],
-  [false, false, false, false, false, false, false, false, false, false, false, false],
-  [false, false, false, false, false, false, false, false, false, false, false, false],
-  [false, false, false, false, false, false, false, false, false, false, false, false]
+  [false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false],
+  [false, false, false, false, false, false, false, false, false, false]
 ]);
 
 export default function pegboardReducer (state = initialState, action) {
