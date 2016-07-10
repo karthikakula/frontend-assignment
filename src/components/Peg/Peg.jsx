@@ -42,7 +42,7 @@ class Peg extends React.Component {
 
     const finalClassName = classnames(
       scss.peg,
-      isDragging ? scss.dragging : null,
+      isDragging && placed ? scss.dragging : null,
       currentPos || placed ? scss.dropped : null
     )
 
@@ -50,7 +50,7 @@ class Peg extends React.Component {
       <div className={ finalClassName } {...props }>
         <span className={ scss.pegId }>{ peg.get('id') }</span>
         <img className={ scss.pegImg } src={ imgSrc } />
-        { placed || isDragging ? null : (<div className={ scss.pegInfo } >x:{ peg.get('x') }, y:{peg.get('y') } </div>) }
+        { placed ? null : (<div className={ scss.pegInfo } >x:{ peg.get('x') }, y:{peg.get('y') } </div>) }
       </div>
     ));
   }
