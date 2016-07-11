@@ -53,7 +53,7 @@ class Peg extends React.Component {
         <i className={ `fa fa-thumb-tack`} style={ { fontSize: height, width } }>
           <span className={ scss.pegId }>{ peg.get('id') }</span>
         </i>
-        { placed ? null : (<div className='pegInfo' >x:{ peg.get('x') },y:{ peg.get('y') }</div>) }
+        { placed ? null : (<div className='pegInfo'>{ `x:${peg.get('x')}, y:${peg.get('y')}` }</div>) }
       </div>
     ));
   }

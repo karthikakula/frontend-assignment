@@ -31,10 +31,6 @@ class PegboardContainer extends React.Component {
   onCheck() {
     const { pegboard, pegs } = this.props;
 
-    if(this.getPegsLeft().length > 0) {
-      return alert('You still have pegs left to place')
-    }
-
     const res = pegs.map(peg => {
       if(!is(pegboard.getIn([peg.get('x'), peg.get('y')]), peg)) {
         return `Peg ${peg.get('id')} should be at ${peg.get('x')}, ${peg.get('y')}\n`;

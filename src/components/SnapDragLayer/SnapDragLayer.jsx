@@ -24,7 +24,7 @@ class SnapDragLayer extends React.Component {
       sidebarWidth, pinHeight, pinWidth
     } = this.props;
 
-    if(currentOffset) {
+    if(currentOffset && item.peg) {
       if( currentOffset.x <= ((sidebarWidth + margins.left) * 0.99) ||
           currentOffset.x >= ((sidebarWidth + xSize + margins.left) * 1.01) ||
           currentOffset.y <= ((margins.top) * 0.99) ||
@@ -38,10 +38,8 @@ class SnapDragLayer extends React.Component {
       const style = {
         position:'absolute',
 
-        // 40 for pin height
         top: `${yScale(y) + margins.top - pinHeight}px`,
 
-        // 14 for 1/2 pin width, 57 for sidebar width
         left: `${xScale(x) + margins.left - (pinWidth/2) + sidebarWidth}px`
       };
 
