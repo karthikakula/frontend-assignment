@@ -74,7 +74,6 @@ class Pegboard extends React.Component {
               (<Peg
                 height={ pinHeight }
                 width={ pinWidth }
-                onPegGrab={ onPegGrab }
                 peg={ pegboard.getIn([xNum, yNum]) }
                 placed={ true }
                 currentPos={ { x: xNum, y: yNum } }

@@ -83,7 +83,7 @@ class PegboardContainer extends React.Component {
         <Sidebar className={ classes.sideBar } width={ SIDEBAR_WIDTH }>
           {
             this.getPegsLeft()
-              .map((peg) => <Peg height={ PIN_HEIGHT } width={ PIN_WIDTH } onPegGrab={ removePeg } peg={ peg } key={ peg.get('id') } />)
+              .map((peg) => <Peg height={ PIN_HEIGHT } width={ PIN_WIDTH } peg={ peg } key={ peg.get('id') } />)
           }
         </Sidebar>
         <SnapDragLayer

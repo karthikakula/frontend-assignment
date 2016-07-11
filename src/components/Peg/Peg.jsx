@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import scss from './Peg.scss';
 import { DragSource } from 'react-dnd';
 import classnames from 'classnames';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 export const PEG_TYPE = 'PEG';
 
@@ -36,7 +37,10 @@ class Peg extends React.Component {
   }
 
   render() {
-    const { connectDragSource, placed, isDragging, connectDragPreview, onPegGrab, peg, currentPos, width, height, ...props } = this.props;
+    const {
+      connectDragSource, connectDragPreview, isDragging,
+      placed, peg, currentPos, width, height, ...props
+    } = this.props;
 
     const finalClassName = classnames(
       scss.peg,
@@ -46,13 +50,28 @@ class Peg extends React.Component {
 
     return (connectDragSource(
       <div className={ finalClassName } {...props }>
-        <i className={ `fa fa-thumb-tack ${scss.pegIcon}`} style={ { fontSize: height, width } }>
-            <span className={ scss.pegId }>{ peg.get('id') }</span>
+        <i className={ `fa fa-thumb-tack`} style={ { fontSize: height, width } }>
+          <span className={ scss.pegId }>{ peg.get('id') }</span>
         </i>
-        { placed ? null : (<div className={ scss.pegInfo } >x:{ peg.get('x') }, y:{peg.get('y') } </div>) }
+        { placed ? null : (<div className='pegInfo' >x:{ peg.get('x') },y:{ peg.get('y') }</div>) }
       </div>
     ));
   }
+}
+
+Peg.propTypes = {
+  placed: PropTypes.bool,
+  currentPos: PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired
+  }),
+  peg: ImmutablePropTypes.mapContains({
+    id: PropTypes.string.isRequired,
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired
+  }).isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
 }
 
 export default DragSource(PEG_TYPE, source, collect)(Peg);
