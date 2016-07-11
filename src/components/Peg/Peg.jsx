@@ -25,12 +25,16 @@ const source = {
 const collect = (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging(),
-  canDrag: monitor.canDrag()
+  isDragging: monitor.isDragging()
 });
 
 
 class Peg extends React.Component {
+  constructor(props) {
+    super(props);
+    this.renderPeg = this.renderPeg.bind(this);
+  }
+
   componentDidMount() {
     const { connectDragPreview } = this.props;
 
@@ -41,27 +45,41 @@ class Peg extends React.Component {
     });
   }
 
-  render() {
+  renderPeg() {
     const {
-      connectDragSource, connectDragPreview, isDragging,
-      placed, peg, currentPos, width, height, canDrag, ...props
+      isDragging, placed, peg, currentPos, width, height, disabled,
+      connectDragPreview, connectDragSource, ...props
     } = this.props;
 
     const finalClassName = classnames(
       scss.peg,
       isDragging && placed ? scss.dragging : null,
       currentPos || placed ? scss.dropped : null,
-      canDrag ? null : scss.cantDrag
+      !disabled ? null : scss.cantDrag
     )
 
-    return (connectDragSource(
-      <div className={ finalClassName } {...props }>
-        <i className={ `fa fa-thumb-tack`} style={ { fontSize: height, width } }>
-          <span className={ scss.pegId }>{ peg.get('id') }</span>
-        </i>
-        { placed ? null : (<div className='pegInfo'>{ `x:${peg.get('x')}, y:${peg.get('y')}` }</div>) }
-      </div>
-    ));
+    return (<div className={ finalClassName } {...props }>
+      <i className={ `fa fa-thumb-tack`} style={ { fontSize: height, width, color: peg.get('color') } }>
+        <span style={ { backgroundColor: peg.get('color') }} className={ scss.pegId }>{ peg.get('id') }</span>
+      </i>
+      { placed ? null : (
+        <div className={ scss.pegInfo }>
+          <span>{ peg.get('x') }</span>
+          <span>{ peg.get('y') }</span>
+        </div>) }
+    </div>);
+  }
+
+  render() {
+    const { isPreview, connectDragSource } = this.props;
+
+    if(isPreview) {
+      return this.renderPeg();
+    }
+
+    return connectDragSource(
+      this.renderPeg()
+    );
   }
 }
 

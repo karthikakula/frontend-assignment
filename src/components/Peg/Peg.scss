@@ -1,34 +1,33 @@
 .cantDrag {
-  opacity: 0.5;
+  opacity: 0.3;
+}
+
+.pegInfo {
+  width: 55px;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .peg {
   transition: transform 0.4s;
   background: transparent;
-  border: 1px solid black;
   margin-bottom: 5px;
   position: relative;
   text-align: center;
 
   .pegId {
     position: absolute;
-    color: yellow;
+    color: white;
     font-weight: bold;
     font-size: 22px;
-    left: 9px;
+    left: 10px;
     top: 6px;
-    background-color: black;
-  }
-
-  .pegInfo {
-    width: 55px;
-    text-align: center;
-    padding-top: 10px;
   }
 
   i {
     position: relative;
-    color: black;
     text-align: center;
   }
 

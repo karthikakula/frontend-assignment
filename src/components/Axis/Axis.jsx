@@ -10,7 +10,7 @@ class Axis extends React.Component {
     // D3 so it can draw an axis
     return this.connectD3();
   }
-  
+
   componentDidUpdate() {
     // when the DOM is rendered,
     // pass control of the "g" to
@@ -25,7 +25,7 @@ class Axis extends React.Component {
 
     const axis = (orientation === 'left' ? axisLeft() : axisBottom())
       .tickSizeOuter(0)
-      .tickSizeInner(Math.abs(tickSizeInner) * -1) // in case somone passes a negative?
+      .tickSizeInner(Math.abs(tickSizeInner) * -1)
       .ticks(ticks)
       .tickPadding(10) // @TODO take this hard code out
       .scale(scale);

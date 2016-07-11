@@ -18,17 +18,23 @@ const layerStyles = {
 };
 
 class SnapDragLayer extends React.Component {
-  render() {
+
+  constructor(props) {
+    super(props);
+    this.renderPreviewPeg = this.renderPreviewPeg.bind(this);
+  }
+
+  renderPreviewPeg() {
     const {
       isDragging, currentOffset, item, xScale, yScale, xSize, ySize, margins,
       sidebarWidth, pinHeight, pinWidth
     } = this.props;
 
     if(currentOffset && item.peg) {
-      if( currentOffset.x <= ((sidebarWidth + margins.left) * 0.99) ||
-          currentOffset.x >= ((sidebarWidth + xSize + margins.left) * 1.01) ||
-          currentOffset.y <= ((margins.top) * 0.99) ||
-          currentOffset.y >= ((ySize + margins.top) * 1.01) ) {
+      if( currentOffset.x <= ((sidebarWidth + margins.left) * 0.97) ||
+          currentOffset.x >= ((sidebarWidth + xSize + margins.left) * 1.03) ||
+          currentOffset.y <= ((margins.top) * 0.97) ||
+          currentOffset.y >= ((ySize + margins.top) * 1.03) ) {
         return null;
       }
 
@@ -43,12 +49,16 @@ class SnapDragLayer extends React.Component {
         left: `${xScale(x) + margins.left - (pinWidth/2) + sidebarWidth}px`
       };
 
-      return (<div style={ layerStyles }>
-        <Peg width={ pinWidth } height={ pinHeight } placed={ true } peg={ item.peg } style={ style } />
-      </div>);
+      return <Peg width={ pinWidth } height={ pinHeight } placed={ true } peg={ item.peg } style={ style }/>;
     }
 
     return null;
+  }
+
+  render() {
+    return (<div style={ layerStyles }>
+      { this.renderPreviewPeg() }
+    </div>);
   }
 }
 

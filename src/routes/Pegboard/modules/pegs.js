@@ -34,10 +34,10 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = fromJS([
-  { id: '1', x: 5, y: 3 },
-  { id: '2', x: 9, y: 1 },
-  { id: '3', x: 2, y: 0 },
-  { id: '4', x: 1, y: 5 },
+  { id: '1', x: 5, y: 3, color: '#5cb85c' },
+  { id: '2', x: 9, y: 1, color: '#d9534f' },
+  { id: '3', x: 2, y: 0, color: '#5bc0de' },
+  { id: '4', x: 1, y: 5, color: '#f0ad4e' },
 ]);
 
 export default function pegsReducer (state = initialState, action) {

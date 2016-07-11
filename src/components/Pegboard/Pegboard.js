@@ -40,11 +40,8 @@ class Pegboard extends React.Component {
   pegColor(x, y) {
     const { pegboard, isOver } = this.props;
 
-    if(pegboard.getIn([x, y])) {
-      return 'green';
-    }
 
-    return isOver ? 'red' : 'grey';
+    return isOver && !pegboard.getIn([x, y]) ? 'red' : 'grey';
   }
 
   pegRadius(x, y) {
@@ -93,14 +90,12 @@ class Pegboard extends React.Component {
             {
               Range(0, xTicks + 1).map(xNum => (
                 Range(0, yTicks + 1).map(yNum => (
-                  !pegboard.getIn([xNum, yNum]) ?
-                    <circle
-                      r={ this.pegRadius(xNum, yNum) }
-                      cx={ xScale(xNum) }
-                      cy={ yScale(yNum) }
-                      fill={ this.pegColor(xNum, yNum) }
-                    /> :
-                    null
+                  <circle
+                    r={ this.pegRadius(xNum, yNum) }
+                    cx={ xScale(xNum) }
+                    cy={ yScale(yNum) }
+                    fill={ this.pegColor(xNum, yNum) }
+                  />
                 ))
               ))
             }
