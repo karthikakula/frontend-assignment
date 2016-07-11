@@ -15,13 +15,18 @@ const source = {
       peg: props.peg,
       currentPos
     };
+  },
+
+  canDrag(props) {
+    return !props.disabled
   }
 }
 
 const collect = (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging()
+  isDragging: monitor.isDragging(),
+  canDrag: monitor.canDrag()
 });
 
 
@@ -39,13 +44,14 @@ class Peg extends React.Component {
   render() {
     const {
       connectDragSource, connectDragPreview, isDragging,
-      placed, peg, currentPos, width, height, ...props
+      placed, peg, currentPos, width, height, canDrag, ...props
     } = this.props;
 
     const finalClassName = classnames(
       scss.peg,
       isDragging && placed ? scss.dragging : null,
-      currentPos || placed ? scss.dropped : null
+      currentPos || placed ? scss.dropped : null,
+      canDrag ? null : scss.cantDrag
     )
 
     return (connectDragSource(
